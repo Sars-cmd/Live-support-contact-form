@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SARS Contact Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, #005e8e, #0077b6);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 70px;
+            width: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        
+        .logo-text {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .contact-form-container {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        h1 {
+            color: #005e8e;
+            margin-bottom: 20px;
+            font-size: 32px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #005e8e;
+        }
+        
+        h2 {
+            color: #005e8e;
+            margin: 25px 0 15px;
+            font-size: 24px;
+        }
+        
+        h3 {
+            color: #005e8e;
+            margin: 20px 0 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: #005e8e;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 94, 142, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        button {
+            background: linear-gradient(to right, #005e8e, #0077b6);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: linear-gradient(to right, #004670, #00629c);
+        }
+        
+        .disclaimer {
+            background-color: #f0f7ff;
+            border-left: 4px solid #005e8e;
+            padding: 20px;
+            margin: 25px 0;
+            font-size: 14px;
+            color: #555;
+            border-radius: 4px;
+        }
+        
+        .info-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+        
+        .contact-details {
+            list-style-type: none;
+        }
+        
+        .contact-details li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .contact-details li:last-child {
+            border-bottom: none;
+        }
+        
+        .contact-details i {
+            margin-right: 15px;
+            color: #005e8e;
+            min-width: 25px;
+            text-align: center;
+            font-size: 20px;
+        }
+        
+        .success-message {
+            display: none;
+            background-color: #dff2d8;
+            color: #4F8A10;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            background: linear-gradient(to right, #005e8e, #0077b6);
+            color: white;
+        }
+        
+        /* Pre-chat Form Styles */
+        .prechat-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .prechat-form {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+        }
+        
+        .prechat-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        /* Chat Elements */
+        .chat-launcher {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(to right, #005e8e, #0077b6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        
+        .chat-launcher:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .chat-launcher i {
+            font-size: 24px;
+        }
+        
+        .chat-popup {
+            display: none;
+            position: fixed;
+            bottom: 95px;
+            right: 25px;
+            width: 380px;
+            height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            z-index: 1000;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background: linear-gradient(to right, #005e8e, #0077b6);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-header h3 {
+            color: white;
+            margin: 0;
+            font-size: 18px;
+        }
+        
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            width: auto;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .chat-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .notification {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .logo-text {
+                font-size: 20px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .chat-popup {
+                width: 90%;
+                right: 5%;
+                bottom: 80px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo-container {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo">
+                        <svg width="50" height="50" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="#005e8e" />
+                            <text x="50" y="58" text-anchor="middle" fill="white" font-size="20" font-weight="bold">SARS</text>
+                        </svg>
+                    </div>
+                    <div class="logo-text">South African Revenue Service</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Contact SARS Support</h1>
+        
+        <div class="main-content">
+            <div class="contact-form-container">
+                <h2>Send us a message</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject *</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select a subject</option>
+                            <option value="Tax Inquiry">Tax Inquiry</option>
+                            <option value="Registration">Registration</option>
+                            <option value="eFiling Support">eFiling Support</option>
+                            <option value="Complaint">Complaint</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message *</label>
+                        <textarea id="message" name="message" placeholder="Please provide details of your inquiry..." required></textarea>
+                    </div>
+                    
+                    <div class="disclaimer">
+                        <h3>Email Disclaimer</h3>
+                        <p>This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error, please notify the system manager. This message contains confidential information and is intended only for the individual named. If you are not the named addressee, you should not disseminate, distribute or copy this e-mail.</p>
+                    </div>
+                    
+                    <button type="submit">Submit Message</button>
+                    
+                    <div id="successMessage" class="success-message">
+                        <i class="fas fa-check-circle"></i> Thank you for your message. We will get back to you soon.
+                    </div>
+                </form>
+            </div>
+            
+            <div class="contact-info">
+                <div class="info-box">
+                    <h2>Contact Information</h2>
+                    <ul class="contact-details">
+                        <li><i class="fas fa-phone"></i> SARS Contact Centre: 0800 00 7277</li>
+                        <li><i class="fas fa-building"></i> Head Office: 299 Bronkhorst Street, Nieuw Muckleneuk, Brooklyn, Pretoria</li>
+                        <li><i class="fas fa-globe"></i> Website: www.sars.gov.za</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h2>Live Chat Support</h2>
+                    <p>Our SARS agents are available through live chat during business hours (8:00 - 16:00 Monday to Friday).</p>
+                    <p>Click the chat button at the bottom right of the screen to start a conversation with one of our support agents.</p>
+                    <p><strong>Note:</strong> You will need to provide your email and cell phone number before starting a chat.</p>
+                </div>
+                
+                <div class="info-box">
+                    <h2>Office Hours</h2>
+                    <p><i class="fas fa-clock"></i> Monday - Friday: 8:00 - 16:00</p>
+                    <p><i class="fas fa-calendar-times"></i> Closed on weekends and public holidays</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 South African Revenue Service. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Pre-chat Form Modal -->
+    <div class="prechat-modal" id="prechatModal">
+        <div class="prechat-form">
+            <h2><i class="fas fa-headset"></i> Contact SARS Agent</h2>
+            <p>Please provide your contact information before starting the chat:</p>
+            <form id="prechatForm">
+                <div class="form-group">
+                    <label for="prechatName">Full Name *</label>
+                    <input type="text" id="prechatName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prechatEmail">Email Address *</label>
+                    <input type="email" id="prechatEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prechatPhone">Cell Phone Number *</label>
+                    <input type="tel" id="prechatPhone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="prechatQuery">What can we help you with? *</label>
+                    <select id="prechatQuery" required>
+                        <option value="">Select an option</option>
+                        <option value="Tax Inquiry">Tax Inquiry</option>
+                        <option value="Registration">Registration</option>
+                        <option value="eFiling Support">eFiling Support</option>
+                        <option value="Complaint">Complaint</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <button type="submit">Start Chat</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chat Elements -->
+    <div class="chat-launcher" onclick="showPrechatModal()">
+        <i class="fas fa-comments"></i>
+        <div class="notification" id="chatNotification">1</div>
+    </div>
+
+    <div class="chat-popup" id="chatPopup">
+        <div class="chat-header">
+            <h3><i class="fas fa-headset"></i> SARS Agent Support</h3>
+            <button class="close-chat" onclick="closeChat()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <iframe class="chat-frame" id="tawkIframe" src="about:blank"></iframe>
+    </div>
+
+    <script>
+        // Show pre-chat modal
+        function showPrechatModal() {
+            document.getElementById('prechatModal').style.display = 'flex';
+        }
+        
+        // Close pre-chat modal
+        function closePrechatModal() {
+            document.getElementById('prechatModal').style.display = 'none';
+        }
+        
+        // Open chat
+        function openChat() {
+            const chatPopup = document.getElementById('chatPopup');
+            const tawkIframe = document.getElementById('tawkIframe');
+            const notification = document.getElementById('chatNotification');
+            
+            chatPopup.style.display = 'flex';
+            notification.style.display = 'none';
+            
+            // Load Tawk.to in the iframe if not already loaded
+            if (tawkIframe.src === 'about:blank') {
+                tawkIframe.src = 'https://tawk.to/chat/68aa6fcb661c3b192cff640c/1j3cs9dgj';
+            }
+        }
+        
+        // Close chat
+        function closeChat() {
+            document.getElementById('chatPopup').style.display = 'none';
+        }
+        
+        // Handle pre-chat form submission
+        document.getElementById('prechatForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('prechatName').value;
+            const email = document.getElementById('prechatEmail').value;
+            const phone = document.getElementById('prechatPhone').value;
+            const query = document.getElementById('prechatQuery').value;
+            
+            // Validate form
+            if (!name || !email || !phone || !query) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            
+            // Validate phone format (basic validation)
+            const phoneRegex = /^[0-9+\-\s()]{10,}$/;
+            if (!phoneRegex.test(phone)) {
+                alert('Please enter a valid phone number.');
+                return;
+            }
+            
+            // If validation passes, close modal and open chat
+            closePrechatModal();
+            openChat();
+            
+            // Here you could also send the user info to your server or Tawk.to
+            // For example, set visitor details in Tawk.to:
+            if (typeof Tawk_API !== 'undefined') {
+                Tawk_API.setAttributes({
+                    'name': name,
+                    'email': email,
+                    'phone': phone
+                }, function(error) {
+                    if (error) {
+                        console.error('Error setting visitor attributes:', error);
+                    }
+                });
+            }
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('prechatModal');
+            if (event.target === modal) {
+                closePrechatModal();
+            }
+        });
+
+        // Form submission handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Basic form validation
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            if (!name || !email || !subject || !message) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Prepare form data
+            const formData = {
+                name: name,
+                email: email,
+                subject: subject,
+                message: message,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Send data to usebasin endpoint
+            fetch('https://usebasin.com/f/bdf169f66960', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Show success message
+                    document.getElementById('successMessage').style.display = 'block';
+                    
+                    // Reset form
+                    document.getElementById('contactForm').reset();
+                    
+                    // Scroll to success message
+                    document.getElementById('successMessage').scrollIntoView({behavior: 'smooth'});
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting your form. Please try again later.');
+            });
+        });
+        
+        // Simulate new message notification after 10 seconds
+        setTimeout(() => {
+            const notification = document.getElementById('chatNotification');
+            notification.style.display = 'flex';
+        }, 10000);
+    </script>
+
+    <!-- Tawk.to Script -->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function() {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/68aa6fcb661c3b192cff640c/1j3cs9dgj';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+</body>
+</html>
